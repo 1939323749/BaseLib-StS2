@@ -66,6 +66,11 @@ public static class BaseLibMain
         MainHarmony.TryPatchAll(assembly);
         
         CustomLocTableManager.Register("card_modifiers");
+        
+        
+        ModCredits.Register(ModId, 
+            new ModCredits.Section("TEAM"),
+            new ModCredits.Section("CONTRIBUTORS"));
     }
 
     //Hopefully temporary fix for linux

@@ -51,6 +51,14 @@ public abstract class CustomCharacterModel : CharacterModel, ICustomModel, ILoca
     public virtual bool HideInCompendium => false;
 
     /// <summary>
+    /// The ID that the game will attempt to open the compendium to when opening the compendium in a run
+    /// as this character. Mostly recommended for use with HideInCompendium, though it can be used separately.
+    /// If this ID is not found, the compendium will default to the Ironclad.
+    /// </summary>
+    public virtual ModelId DefaultCompendiumOpenModelId => Id;
+
+    /// <summary>
+    /// The filepath to the character's scene.
     /// Override this or place your scene at res://scenes/creature_visuals/class_name.tscn
     /// </summary>
     public virtual string? CustomVisualPath => null;
@@ -110,9 +118,8 @@ public abstract class CustomCharacterModel : CharacterModel, ICustomModel, ILoca
 
     /// <summary>
     /// Override to provide a custom NCreatureVisuals scene.
-    /// If not overridden, an NCreatureVisuals will be generated from CustomVisualPath.
+    /// If not overridden, an NCreatureVisuals will be loaded from <see cref="CustomVisualPath"/>.
     /// </summary>
-    /// <returns></returns>
     public virtual NCreatureVisuals? CreateCustomVisuals()
     {
         return null;
@@ -139,19 +146,6 @@ public abstract class CustomCharacterModel : CharacterModel, ICustomModel, ILoca
     /// use this method to set up a controller that will use animations of your choice for each animation.
     /// Any omitted animation parameters will default to the idle animation.
     /// </summary>
-    /// <param name="controller"></param>
-    /// <param name="idleName"></param>
-    /// <param name="deadName"></param>
-    /// <param name="deadLoop"></param>
-    /// <param name="hitName"></param>
-    /// <param name="hitLoop"></param>
-    /// <param name="attackName"></param>
-    /// <param name="attackLoop"></param>
-    /// <param name="castName"></param>
-    /// <param name="castLoop"></param>
-    /// <param name="relaxedName"></param>
-    /// <param name="relaxedLoop"></param>
-    /// <returns></returns>
     public static CreatureAnimator SetupAnimationState(MegaSprite controller, string idleName, 
         string? deadName = null, bool deadLoop = false,
         string? hitName = null, bool hitLoop = false,

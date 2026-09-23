@@ -24,6 +24,9 @@ public static class WhatMod
     private static readonly Dictionary<Assembly, Mod> ModByAssembly = [];
     private static readonly Dictionary<Type, Mod?> ModByType = [];
 
+    /// <summary>
+    /// Retrieve the list of assemblies associated with a specific mod.
+    /// </summary>
     public static List<Assembly> AssembliesForMod(Mod mod) => AssembliesByMod.GetValueOrDefault(mod, []);
 
     internal static void BuildAfterInit()
@@ -113,12 +116,17 @@ public static class WhatMod
 
         var mod = FindMod(type);
         var name = mod?.manifest?.name;
-        var id = mod?.manifest?.id ??  type.GetRootNamespace();
+        var id = mod?.manifest?.id ?? type.GetRootNamespace();
 
         if (string.IsNullOrWhiteSpace(name))
             return id;
         if (string.IsNullOrWhiteSpace(id) || id.Equals(name, StringComparison.OrdinalIgnoreCase))
             return name;
-        return BaseLibConfig.IncludeModId ? $"{name} ({id})" : name;
+        return BaseLibConfig.ModIdDisplayMode switch
+        {
+            BaseLibConfig.ModDisplayMode.Id => id,
+            BaseLibConfig.ModDisplayMode.Name => name,
+            _ => $"{name} ({id})"
+        };
     }
 }
